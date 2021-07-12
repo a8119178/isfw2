@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+
+    <script>
+        osql.requireLogin();
+
+        function button1Pressed() {
+            execInsert();
+        }
+
+        async function execInsert() {
+            var sql = 'select Data1.date,Food.name,Data1.count,Food.kcal from(Users inner join Data1 on Users.userid=Data1.userid)inner join Food on Data1.id = Food.id';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < objects.length; i++) {
+                html = html + '<tr>';
+                var object = objects[i];
+                html = html + '<td>' + object.date + '</td>';
+                html = html + '<td>' + object.name + '</td>';
+                html = html + '<td>' + object.count + '</td>';
+                html = html + '<td>' + object.kcal + '</td>';
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+        }
+    </script>
+
+
+
+</head>
+
+<body>
+    <h1>自分の記録</h1>
+    学籍番号:<input id="tf1" value="" type="textfield">
+    <br>
+    <button onclick="button1Pressed()">表示</button>
+    <br>
+    <p id="result"></p>
+</body>
+
+</html>

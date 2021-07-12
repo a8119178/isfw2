@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+
+        function button1Pressed() {
+            execInsert();
+        }
+
+        async function execInsert() {
+            var foodname = document.getElementById('tf1').value;
+            var foodkcal = document.getElementById('tf2').value;
+
+            var sql = `insert into Food (name,kcal) values("${foodname}", "${foodkcal}");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = 'OK';
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>食物登録</h1>
+    食物:<input id="tf1" value="" type="textfield">
+    <br>
+    kcal:<input id="tf2" value="" type="textfield">
+    <br>
+    <button onclick="button1Pressed()">登録</button>
+    <br>
+    <p id="result"></p>
+</body>
+
+</html>

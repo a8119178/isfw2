@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            execSelect();
+        });
+
+        async function execSelect() {
+            var sql = 'select * from Food';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < objects.length; i++) {
+                html = html + '<tr>';
+                var object = objects[i];
+                html = html + '<td>' + object.id + '</td>';
+                html = html + '<td>' + object.name + '</td>';
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+        }
+
+
+    </script>
+
+    <script>
+        osql.requireLogin();
+
+        function button1Pressed() {
+            execInsert();
+        }
+
+        async function execInsert() {
+            var userid = document.getElementById('tf1').value;
+            var date = document.getElementById('tf2').value;
+            var foodid = document.getElementById('tf3').value;
+            var count = document.getElementById('tf4').value;
+
+            var sql = `insert into Data1 (userid,date,id,count) values("${userid}", "${date}", "${foodid}", "${count}");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = 'OK';
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>今朝の朝食を入力</h1>
+    <br>
+    食べ物一覧
+    <br>
+    <p id="result"></p>
+    <br>
+    食べたもの
+    <br>
+    uerid: <input id="tf1" value="" type="textfield">
+    <br>
+    日付: <input id="tf2" value="" type="textfield">(4桁でお願いします)
+    <br>
+    食べ物id:<input id="tf3" value="" type="textfield">
+    <br>
+    個数: <input id="tf4" value="" type="textfield">
+    <br>
+    <button onclick="button1Pressed()">登録</button>
+    <br>
+</body>
+
+</html>
