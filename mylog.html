@@ -8,7 +8,6 @@
     <script type="text/javascript" src="lib/jquery.min.js"></script>
     <script type="text/javascript" src="lib/osql.js"></script>
 
-
     <script>
         osql.requireLogin();
 
@@ -17,7 +16,8 @@
         }
 
         async function execInsert() {
-            var sql = 'select Data1.date,Food.name,Data1.count,Food.kcal from(Users inner join Data1 on Users.userid=Data1.userid)inner join Food on Data1.id = Food.id';
+            var userid = document.getElementById('tf1').value;
+            var sql = `select Data1.date,Food.name,Data1.count,Food.kcal from(Users inner join Data1 on Users.userid=Data1.userid)inner join Food on Data1.id = Food.id where Users.userid="${userid}"`;
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
