@@ -17,11 +17,21 @@
 
         async function execInsert() {
             var userid = document.getElementById('tf1').value;
-            var sql = `select Data1.date,Food.name,Data1.count,Food.kcal from(Users inner join Data1 on Users.userid=Data1.userid)inner join Food on Data1.id = Food.id where Users.userid="${userid}"`;
+            var sql = `select Data1.date,Food.name,Data1.count,Food.kcal ,Data1.count * Food.kcal as sum from(Users inner join Data1 on Users.userid=Data1.userid)inner join Food on Data1.id = Food.id where Users.userid="${userid}"`;
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
             html = html + '<table border="1">';
+
+            html = html + '<tr>';
+            html = html + '<th>' + "日付" + '</th>';
+            html = html + '<th>' + "食べ物" + '</th>';
+            html = html + '<th>' + "個数" + '</th>';
+            html = html + '<th>' + "1単位あたりのカロリー" + '</th>';
+            html = html + '<th>' + "合計カロリー" + '</th>';
+            html = html + '</tr>';
+
+
             for (var i = 0; i < objects.length; i++) {
                 html = html + '<tr>';
                 var object = objects[i];
@@ -29,6 +39,7 @@
                 html = html + '<td>' + object.name + '</td>';
                 html = html + '<td>' + object.count + '</td>';
                 html = html + '<td>' + object.kcal + '</td>';
+                html = html + '<td>' + object.sum + '</td>';
                 html = html + '</tr>';
             }
             html = html + '</table>';
@@ -48,7 +59,7 @@
     <br>
     <br>
     <br>
-    日付,食べ物,個数,1単位当たりカロリー
+    日付,食べ物,個数,1単位当たりカロリー,合計カロリー
     <br>
     <p id="result"></p>
 </body>
